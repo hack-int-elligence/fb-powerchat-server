@@ -71,29 +71,6 @@ app.use(function(err, req, res, next) {
   });
 });
 
-// Socketio components
-var io = require('socket.io')(app);
-
-io.on('connection', function(client) {
-    console.log("New client");
-
-    client.on('change', function(data) {
-        room = json['room'];
-        io.broadcast.to(room).emit('draw', {'data': room});
-    });
-
-    client.on('join', function(data) {
-        room = json['room'];
-        io.join(room);
-        io.broadcast.to(room).emit('join', {'data': room});
-    });
-
-    client.on('leave', function(data) {
-        room = json['room'];
-        io.leave(room);
-        io.broadcast.to(room).emit('leave', {'data': room});
-    });
-});
 
 
 module.exports = app;
