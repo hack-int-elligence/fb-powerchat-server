@@ -12,6 +12,21 @@
     "express": "~4.13.1",
     "jade": "~1.11.0",
     "morgan": "~1.6.1",
-    "serve-favicon": "~2.3.0"
-  }
+    "serve-favicon": "~2.3.0",
+    "request": "^2.61.0",
+    "ejs": "^2.3.3"
+  },
+  "description": "fbmessenger",
+  "main": "app.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hack-int-elligence/fbmessengernode.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hack-int-elligence/fbmessengernode/issues"
+  },
+  "homepage": "https://github.com/hack-int-elligence/fbmessengernode"
 }
