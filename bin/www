@@ -36,18 +36,21 @@ io.on('connection', function(client) {
     console.log("New client");
 
     client.on('change', function(data) {
-        room = json['room'];
-        io.broadcast.to(room).emit('draw', {'data': room});
+        console.log(data);
+        room = data['room'];
+        var canvas_json = data.canvas_json;
+        io.broadcast.to(room).emit('draw', {'data': canvas_json});
     });
 
     client.on('join', function(data) {
-        room = json['room'];
+        console.log(data);
+        room = data['room'];
         io.join(room);
         io.broadcast.to(room).emit('join', {'data': room});
     });
 
     client.on('leave', function(data) {
-        room = json['room'];
+        room = data['room'];
         io.leave(room);
         io.broadcast.to(room).emit('leave', {'data': room});
     });
