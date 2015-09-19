@@ -67,4 +67,24 @@ router.get('/youtube/list', function(req, res, next) {
 	})
 });
 
+router.get('/instagram', function(req, res, next) {
+	tag = req.query.keyword.replace(" ", "+")
+    clientKey = '39cf0d72a0e44fcc85d1b92cdc611ee3'
+    url = "https://api.instagram.com/v1/tags/" + tag + "/media/recent?client_id=" + clientKey
+	request.get(url, {}, function (error, response, body) {
+		if (!error && response.statusCode == 200) {
+			var data = JSON.parse(body)['data'];
+			if (data.length > 0) {
+				var url = data[0]['link'] + 'embed'
+				response = {'type': 'instagram', 'data': url, 'result': 'success'}
+			} else {
+				response = {'type': 'youtube', 'data': 'no data', 'result': 'failure'}
+			}
+        } else {
+        	response = {'type': 'instagram', 'data': 'no data', 'result': 'failure'}
+        }
+      	res.send(JSON.stringify(response));
+	})
+});
+
 module.exports = router;
