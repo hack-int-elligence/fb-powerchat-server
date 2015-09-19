@@ -45,13 +45,13 @@ io.on('connection', function(client) {
     client.on('join', function(data) {
         console.log(data);
         room = data['room'];
-        io.join(room);
+        client.join(room);
         io.broadcast.to(room).emit('join', {'data': room});
     });
 
     client.on('leave', function(data) {
         room = data['room'];
-        io.leave(room);
+        client.leave(room);
         io.broadcast.to(room).emit('leave', {'data': room});
     });
 });
