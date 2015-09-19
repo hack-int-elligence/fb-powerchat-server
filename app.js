@@ -4,11 +4,24 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var socket = require('socket.io');
+var fs = require('fs');
+var http = require('http');
+var https = require('https');
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
+
+// var options = {
+//   key: fs.readFileSync('server.key'),
+//   cert: fs.readFileSync('server.crt')
+// };
 
 var app = express();
+
+// create http and https servers
+var httpServer = http.createServer(app).listen(80);
+// var httpsServer = https.createServer(options, app).listen(443);
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -51,6 +64,30 @@ app.use(function(err, req, res, next) {
     message: err.message,
     error: {}
   });
+});
+
+// Socketio components
+var io = socket.listen(httpServer);
+
+io.sockets.on('connection', function(client) {
+    console.log("New client");
+
+    client.on('change', function(data) {
+        room = json['room'];
+        io.sockets.broadcast.to(room).emit('draw', {'data': room});
+    });
+
+    client.on('join', function(data) {
+        room = json['room'];
+        io.sockets.join(room);
+        io.sockets.broadcast.to(room).emit('join', {'data': room});
+    });
+
+    client.on('leave', function(data) {
+        room = json['room'];
+        io.sockets.leave(room);
+        io.sockets.broadcast.to(room).emit('leave', {'data': room});
+    });
 });
 
 
