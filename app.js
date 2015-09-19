@@ -4,7 +4,6 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var socket = require('socket.io');
 var fs = require('fs');
 var http = require('http');
 var https = require('https');
@@ -19,7 +18,7 @@ var routes = require('./routes/index');
 var app = express();
 
 // create http and https servers
-var httpServer = http.createServer(app);
+// var httpServer = http.createServer(app);
 // var httpsServer = https.createServer(options, app).listen(443);
 
 
@@ -73,26 +72,26 @@ app.use(function(err, req, res, next) {
 });
 
 // Socketio components
-var io = socket.listen(httpServer);
+var io = require('socket.io')(app);
 
-io.sockets.on('connection', function(client) {
+io.on('connection', function(client) {
     console.log("New client");
 
     client.on('change', function(data) {
         room = json['room'];
-        io.sockets.broadcast.to(room).emit('draw', {'data': room});
+        io.broadcast.to(room).emit('draw', {'data': room});
     });
 
     client.on('join', function(data) {
         room = json['room'];
-        io.sockets.join(room);
-        io.sockets.broadcast.to(room).emit('join', {'data': room});
+        io.join(room);
+        io.broadcast.to(room).emit('join', {'data': room});
     });
 
     client.on('leave', function(data) {
         room = json['room'];
-        io.sockets.leave(room);
-        io.sockets.broadcast.to(room).emit('leave', {'data': room});
+        io.leave(room);
+        io.broadcast.to(room).emit('leave', {'data': room});
     });
 });
 
