@@ -19,7 +19,7 @@ var routes = require('./routes/index');
 var app = express();
 
 // create http and https servers
-var httpServer = http.createServer(app).listen(80);
+var httpServer = http.createServer(app);
 // var httpsServer = https.createServer(options, app).listen(443);
 
 
@@ -69,24 +69,13 @@ app.use(function(err, req, res, next) {
 // Socketio components
 var io = socket.listen(httpServer);
 
-io.sockets.on('connection', function(client) {
-    console.log("New client");
+io.sockets.on('connection', function(clien ) {
+    console.log("New client !");
 
-    client.on('change', function(data) {
-        room = json['room'];
-        io.sockets.broadcast.to(room).emit('draw', {'data': room});
-    });
+    client.on( 'message', function( data ) {
+        console.log( 'Message received ' + data.name + ":" + data.message );
 
-    client.on('join', function(data) {
-        room = json['room'];
-        io.sockets.join(room);
-        io.sockets.broadcast.to(room).emit('join', {'data': room});
-    });
-
-    client.on('leave', function(data) {
-        room = json['room'];
-        io.sockets.leave(room);
-        io.sockets.broadcast.to(room).emit('leave', {'data': room});
+        io.sockets.emit( 'message', { name: data.name, message: data.message } );
     });
 });
 
