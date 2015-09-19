@@ -39,20 +39,20 @@ io.on('connection', function(client) {
         console.log(data);
         room = data['room'];
         var canvas_json = data.canvas_json;
-        io.broadcast.to(room).emit('draw', {'data': canvas_json});
+        client.broadcast.to(room).emit('draw', {'data': canvas_json});
     });
 
     client.on('join', function(data) {
         console.log(data);
         room = data['room'];
         client.join(room);
-        io.broadcast.to(room).emit('join', {'data': room});
+        client.broadcast.to(room).emit('join', {'data': room});
     });
 
     client.on('leave', function(data) {
         room = data['room'];
         client.leave(room);
-        io.broadcast.to(room).emit('leave', {'data': room});
+        client.broadcast.to(room).emit('leave', {'data': room});
     });
 });
 
