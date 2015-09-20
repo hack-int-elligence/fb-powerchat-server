@@ -68,7 +68,7 @@ router.get('/youtube/list', function(req, res, next) {
 			link_list = [];
 			data.forEach(function (element) {
 				if (element['id']['kind'] === "youtube#video") {
-					link_list.push(element['snippet']['title'], 'https://www.youtube.com/watch?v=' + element['id']['videoId'])
+					link_list.push([element['snippet']['title'], 'https://www.youtube.com/watch?v=' + element['id']['videoId']])
 				}
 			});
             response = {'type': 'youtube', 'data': link_list, 'result': 'success'}
