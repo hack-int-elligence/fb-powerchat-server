@@ -61,8 +61,10 @@ io.on('connection', function(client) {
 io.of('/stream').on('connection', function(client) {
     console.log('Client connected to stream.');
     ss(client).on('file', function(stream, data) {
-        //console.log(stream);
+        console.log(stream);
+        console.log(data);
         global[data.file] = stream;
+        console.log(global);
         var livestream = ss.createStream();
         client.emit('livestream', {'data': data});
     });
