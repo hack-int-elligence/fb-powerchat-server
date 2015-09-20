@@ -101,11 +101,11 @@ router.get('/instagram', function(req, res, next) {
 
 router.get('/stream/:filename', function(req, res, next) {
 	var filename = req.params.filename;
-	if (window[filename]) {
+	if (global[filename]) {
 		res.writeHead(200, {
 			'Content-Type': 'video/mp4'
 		});
-		window[filename].pipe(res);
+		global[filename].pipe(res);
 	}
 });
 
