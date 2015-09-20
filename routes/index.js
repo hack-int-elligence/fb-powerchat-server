@@ -8,19 +8,27 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/giphy', function(req, res, next) {
-	var url = 'https://api.giphy.com/v1/gifs/search?q='+ req.query.keyword + '&api_key=dc6zaTOxFJmzC'
-	var response = {};
-	request.get(url, {}, function (error, response, body) {
-		if (!error && response.statusCode == 200) {
-			var data = JSON.parse(body)['data'];
-			var response_link = data[Math.floor(Math.random() * (data.length - 0 + 1)) + 0]['embed_url'];
-            response = {'type': 'giphy', 'data': response_link, 'result': 'success'}
-        } else {
-        	response = {'type': 'giphy', 'data': 'no data', 'result': 'failure'}
-        }
-        res.send(JSON.stringify(response));
-	})
-	
+    if (req.query.keyword) {
+        var url = 'https://api.giphy.com/v1/gifs/search?q='+ req.query.keyword + '&api_key=dc6zaTOxFJmzC';
+        var response = {};
+        request.get(url, {}, function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                var data = JSON.parse(body)['data'];
+                if (data.length > 0) {
+                    var response_link = data[Math.floor(Math.random() * (data.length - 0 + 1)) + 0]['embed_url'];
+                    response = {'type': 'giphy', 'data': response_link, 'result': 'success'};
+                } else {
+                    response = {'type': 'giphy', 'data': 'no data', 'result': 'failure'};
+                }
+            } else {
+                response = {'type': 'giphy', 'data': 'no data', 'result': 'failure'};
+            }
+            res.send(JSON.stringify(response));
+        });
+    } else {
+        res.send(JSON.stringify({'type': 'giphy', 'data': 'no data', 'result': 'failure'}));
+    }
+
 });
 
 router.get('/youtube', function(req, res, next) {
@@ -85,6 +93,16 @@ router.get('/instagram', function(req, res, next) {
         }
       	res.send(JSON.stringify(response));
 	})
+});
+
+router.get('/stream/:filename', function(req, res, next) {
+	var filename = req.params.filename;
+	if (window[filename]) {
+		res.writeHead(200, {
+			'Content-Type': 'video/mp4'
+		});
+		window[filename].pipe(res);
+	}
 });
 
 module.exports = router;
