@@ -7,6 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('fbmessenger:server');
 var http = require('http');
+var fs = require('fs');
 var ss = require('socket.io-stream');
 
 
@@ -61,15 +62,9 @@ io.on('connection', function(client) {
 io.of('/stream').on('connection', function(client) {
     console.log('Client connected to stream.');
     ss(client).on('file', function(stream, data) {
-        console.log(stream);
-        console.log(data);
-        global[data.file] = stream;
+        //global[data.file] = stream;
         console.log(global);
-        stream.on('end', function(data) {
-          console.log("End of stream:");
-          console.log(data);
-        });
-        var livestream = ss.createStream();
+        stream.pipe(fs.createWriteStream(data.file));
         client.emit('livestream', {'data': data});
     });
 });

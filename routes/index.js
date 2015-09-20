@@ -102,10 +102,11 @@ router.get('/instagram', function(req, res, next) {
 router.get('/stream/:filename', function(req, res, next) {
 
 	var filename = req.params.filename;
-	if (global[filename]) {
-		console.log(global[filename]);
-		global[filename].pipe(res);
-	}
+	// if (global[filename]) {
+	// 	console.log(global[filename]);
+	// 	global[filename].pipe(res);
+	// }
+    fs.createReadStream(filename).pipe(res);
 });
 
 module.exports = router;
