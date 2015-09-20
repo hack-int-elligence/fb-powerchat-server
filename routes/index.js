@@ -15,8 +15,12 @@ router.get('/giphy', function(req, res, next) {
             if (!error && response.statusCode == 200) {
                 var data = JSON.parse(body)['data'];
                 if (data.length > 0) {
-                    var response_link = data[Math.floor(Math.random() * (data.length - 0 + 1)) + 0]['embed_url'];
-                    response = {'type': 'giphy', 'data': response_link, 'result': 'success'};
+                    var response_link = data[Math.floor(Math.random() * (data.length - 0 + 1)) + 0]
+                    if (response_link) {
+                    	response = {'type': 'giphy', 'data': response_link['embed_url'], 'result': 'success'};
+                    } else {
+                    	response = {'type': 'giphy', 'data': 'no data', 'result': 'failure'};
+                    }
                 } else {
                     response = {'type': 'giphy', 'data': 'no data', 'result': 'failure'};
                 }
