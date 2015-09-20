@@ -103,9 +103,6 @@ router.get('/stream/:filename', function(req, res, next) {
 
 	var filename = req.params.filename;
 	if (global[filename]) {
-		res.writeHead(200, {
-			'Content-Type': 'video/mp4'
-		});
 		console.log(global[filename]);
 		global[filename].pipe(res);
 	}
